@@ -38,6 +38,7 @@ describe "Authentication" do
 
       describe "followed by signout" do
         before { click_link "Sign Out" }
+
         it { should have_link('Sign In') }
       end
     end
