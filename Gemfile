@@ -2,9 +2,12 @@ source 'https://rubygems.org'
 ruby '2.0.0'
 
 gem 'rails', '4.0.0.rc1'
-gem 'bootstrap-sass', '2.3.0.1'
+gem 'bootstrap-sass', '2.3.1.0'
 gem 'bcrypt-ruby', '3.0.1'
-gem 'pg', '0.14.1'
+gem 'faker', '1.1.2'
+gem 'will_paginate', '3.0.4'
+gem 'bootstrap-will_paginate', '0.0.9'
+gem 'pg', '0.15.1'
 
 group :development, :test do
   #gem 'sqlite3', '1.3.7'
@@ -16,13 +19,13 @@ group :development, :test do
 end
 
 group :test do
-  gem 'selenium-webdriver', '2.0'
-  gem 'capybara', '2.1.0.rc1'
+  gem 'selenium-webdriver', '2.0.0'
+  gem 'capybara', '2.1.0'
   gem 'rb-fsevent', '0.9.3', :require => false
   gem 'growl', '1.0.3'
-  gem 'factory_girl_rails', '4.2.1'
+  gem 'factory_girl_rails', '4.2.0'
   gem 'cucumber-rails', '1.3.0', :require => false
-  gem 'database_cleaner', '~> 1.0.0.RC1'
+  gem 'database_cleaner', github: 'bmabey/database_cleaner'
 end
 
 group :assets do
