@@ -42,6 +42,9 @@ describe "Authentication" do
         before { click_link "Sign Out" }
 
         it { should have_link('Sign In') }
+        it { should_not have_link('Profile') }
+        it { should_not have_link('Settings') }
+        it { should_not have_link('Sign Out') }
       end
     end
   end
@@ -75,9 +78,7 @@ describe "Authentication" do
       describe "when attempting to visit a protected page" do
         before do
           visit edit_user_path(user)
-          fill_in "Email",    with: user.email
-          fill_in "Password", with: user.password
-          click_button "Sign In"
+          fill_in_valid_signin(user)
         end
 
         describe "after signing in" do
@@ -85,6 +86,34 @@ describe "Authentication" do
           it "should render the desired protected page" do
             expect(page).to have_title('Edit user')
           end
+
+          describe "when signing in again" do
+            before do
+              delete signout_path
+              valid_signin(user)
+            end
+
+            it "should render the default (profile) page" do
+              expect(page).to have_title(user.name) 
+            end
+          end
+
+          describe "visiting Users#new page" do
+            before { visit signup_path }
+
+            it { should_not have_title('Sign Up') }
+          end
+
+          describe "submitting POST request to Users#create action" do
+            before do
+              user_params = { name: "test", email: "testloggedin@example.com", 
+                              password: "password", password_confirm: "password" }
+              post users_path, user: user_params
+            end
+
+            specify { expect(response).to redirect_to(root_path) }
+          end
+
         end
       end
 
