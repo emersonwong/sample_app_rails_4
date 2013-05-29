@@ -44,6 +44,45 @@ describe "Micropost pages" do
         expect { click_link "delete" }.to change(Micropost, :count).by(-1)
       end
     end
+
+    describe "as incorrect user" do
+
+      let(:another_user) { FactoryGirl.create(:user, email: "anotheruser@example.com") }
+
+      before do
+        valid_signin another_user
+        visit user_path user
+      end
+
+      it { should_not have_link('delete', href: micropost_path(user.microposts.first)) }
+    end
+
+  end
+
+  describe "micropost pagination" do
+
+    # TODO - this should be before(:all) but it breaks test
+    before do
+      @user_with_many_posts = FactoryGirl.create(:user, email: "manyposts@example.com")
+      @user_with_many_posts.save
+      31.times { FactoryGirl.create(:micropost, user: @user_with_many_posts) }
+      valid_signin @user_with_many_posts
+      visit root_path
+    end
+
+    # SEE TODO ABOVE
+    after do
+      @user_with_many_posts.microposts.delete_all
+      @user_with_many_posts.delete
+    end
+ 
+    it { should have_selector('div.pagination') }
+
+    it "should list each micropost" do
+      @user_with_many_posts.microposts.paginate(page: 1).each do |mp|
+        expect(page).to have_selector('li', text: mp.content)
+      end
+    end
   end
 
 end
