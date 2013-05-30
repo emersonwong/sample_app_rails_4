@@ -72,8 +72,7 @@ describe "Micropost pages" do
 
     # SEE TODO ABOVE
     after do
-      @user_with_many_posts.microposts.delete_all
-      @user_with_many_posts.delete
+      @user_with_many_posts.destroy
     end
  
     it { should have_selector('div.pagination') }
