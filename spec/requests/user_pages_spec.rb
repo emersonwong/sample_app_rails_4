@@ -70,6 +70,7 @@ describe "User pages" do
     end
 
     describe "follow/unfollow buttons" do
+
       let(:other_user) { FactoryGirl.create(:user) }
       before { valid_signin user }
 
@@ -117,6 +118,24 @@ describe "User pages" do
           it { should have_xpath("//input[@value='Follow']") }
         end
       end
+    end
+
+    describe "follower/following counts" do
+
+      let(:second_user) { FactoryGirl.create(:user) }
+      let(:third_user)  { FactoryGirl.create(:user) }
+
+      before do
+        user.follow!(second_user)
+        second_user.follow!(user)
+        third_user.follow!(user)
+        valid_signin user
+        visit user_path(user)
+      end
+
+      it { should have_link("1 following", href: following_user_path(user)) }
+      it { should have_link("2 followers", href: followers_user_path(user)) }
+
     end
 
   end
