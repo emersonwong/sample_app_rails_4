@@ -61,17 +61,19 @@ describe "Micropost pages" do
 
   describe "micropost pagination" do
 
-    # TODO - this should be before(:all) but it breaks test
-    before do
+    before(:all) do
       @user_with_many_posts = FactoryGirl.create(:user, email: "manyposts@example.com")
       @user_with_many_posts.save
       31.times { FactoryGirl.create(:micropost, user: @user_with_many_posts) }
+    end
+
+    # this has to be :each because session resets between tests
+    before(:each) do
       valid_signin @user_with_many_posts
       visit root_path
     end
 
-    # SEE TODO ABOVE
-    after do
+    after(:all) do
       @user_with_many_posts.destroy
     end
  
